@@ -36,6 +36,9 @@ func getPart2Answer(inputArr []int) int {
 			if i == i2 {
 				continue
 			}
+			if val+val2 > 2020 {
+				continue
+			}
 			for i3, val3 := range prunedInput {
 
 				// Don't use the same number twice
