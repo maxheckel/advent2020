@@ -27,10 +27,8 @@ func smallestNumber(inputArr []int) int{
 }
 
 func getPart2Answer(inputArr []int) int {
-	part2Answer := -1
 	// If any number added to the smallest number is > 2020 then we can ignore it
 	prunedInput := getPrunedInput(inputArr)
-	Top:
 	for i, val := range prunedInput {
 		for i2, val2 := range prunedInput {
 			// Don't use the same number twice
@@ -44,13 +42,13 @@ func getPart2Answer(inputArr []int) int {
 					continue
 				}
 				if val+val2+val3 == 2020 {
-					part2Answer = val * val2 * val3
-					break Top
+					return val * val2 * val3
+
 				}
 			}
 		}
 	}
-	return part2Answer
+	return 0
 }
 
 func getPrunedInput(inputArr []int) []int {
@@ -66,7 +64,6 @@ func getPrunedInput(inputArr []int) []int {
 
 
 func getPart1Answer(inputArr []int) int {
-	part1Answer := -1
 	for i, v := range inputArr {
 		for i2, v2 := range inputArr {
 			// Don't compare the same number to itself
@@ -74,16 +71,11 @@ func getPart1Answer(inputArr []int) int {
 				continue
 			}
 			if v+v2 == 2020 {
-				part1Answer = v * v2
-				break
+				return v * v2
 			}
 		}
-		// Early exit if we found the answer
-		if part1Answer != -1 {
-			break
-		}
 	}
-	return part1Answer
+	return 0
 }
 
 func getInputArray() []int {
