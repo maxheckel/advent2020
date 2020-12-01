@@ -30,13 +30,11 @@ func getPart2Answer(inputArr []int) int {
 	part2Answer := -1
 	// If any number added to the smallest number is > 2020 then we can ignore it
 	prunedInput := getPrunedInput(inputArr)
+	Top:
 	for i, val := range prunedInput {
 		for i2, val2 := range prunedInput {
 			// Don't use the same number twice
-			if i == i2 {
-				continue
-			}
-			if val+val2 > 2020 {
+			if val+val2 > 2020 ||  i == i2 {
 				continue
 			}
 			for i3, val3 := range prunedInput {
@@ -47,15 +45,9 @@ func getPart2Answer(inputArr []int) int {
 				}
 				if val+val2+val3 == 2020 {
 					part2Answer = val * val2 * val3
-					break
+					break Top
 				}
 			}
-			if part2Answer != -1 {
-				break
-			}
-		}
-		if part2Answer != -1 {
-			break
 		}
 	}
 	return part2Answer
