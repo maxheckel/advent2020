@@ -16,19 +16,27 @@ func main() {
 	fmt.Println(part2Answer)
 }
 
+func smallestNumber(inputArr []int) int{
+	tracker := 1000000000
+	for _, val := range inputArr {
+		if val < tracker {
+			tracker = val
+		}
+	}
+	return tracker
+}
+
 func getPart2Answer(inputArr []int) int {
 	part2Answer := -1
-	for i, val := range inputArr {
-		for i2, val2 := range inputArr {
+	// If any number added to the smallest number is > 2020 then we can ignore it
+	prunedInput := getPrunedInput(inputArr)
+	for i, val := range prunedInput {
+		for i2, val2 := range prunedInput {
 			// Don't use the same number twice
 			if i == i2 {
 				continue
 			}
-			// If these two add up to more than 2020 then we can skip this iteration
-			if val+val2 > 2020 {
-				continue
-			}
-			for i3, val3 := range inputArr {
+			for i3, val3 := range prunedInput {
 
 				// Don't use the same number twice
 				if i2 == i3 || i2 == i {
@@ -48,6 +56,17 @@ func getPart2Answer(inputArr []int) int {
 		}
 	}
 	return part2Answer
+}
+
+func getPrunedInput(inputArr []int) []int {
+	prunedInput := []int{}
+	smallestNum := smallestNumber(inputArr)
+	for _, val := range inputArr {
+		if val+smallestNum < 2020 {
+			prunedInput = append(prunedInput, val)
+		}
+	}
+	return prunedInput
 }
 
 
