@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -17,7 +18,7 @@ func main() {
 }
 
 func smallestNumber(inputArr []int) int{
-	tracker := 1000000000
+	tracker := math.MaxInt64
 	for _, val := range inputArr {
 		if val < tracker {
 			tracker = val
