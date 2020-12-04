@@ -11,8 +11,10 @@ const input = `1772,1065,1827,1671,1181,1915,1657,1632,1053,1546,1039,1388,1698,
 
 func main() {
 	inputArr := getInputArray()
-	part1Answer := getPart1Answer(inputArr)
-	part2Answer := getPart2Answer(inputArr)
+	// If any number added to the smallest number is > 2020 then we can ignore it
+	prunedInput := getPrunedInput(inputArr)
+	part1Answer := getPart1Answer(prunedInput)
+	part2Answer := getPart2Answer(prunedInput)
 	fmt.Println(part1Answer)
 	fmt.Println(part2Answer)
 }
@@ -28,15 +30,14 @@ func smallestNumber(inputArr []int) int{
 }
 
 func getPart2Answer(inputArr []int) int {
-	// If any number added to the smallest number is > 2020 then we can ignore it
-	prunedInput := getPrunedInput(inputArr)
-	for i, val := range prunedInput {
-		for i2, val2 := range prunedInput {
+
+	for i, val := range inputArr {
+		for i2, val2 := range inputArr {
 			// Don't use the same number twice
 			if val+val2 > 2020 ||  i == i2 {
 				continue
 			}
-			for i3, val3 := range prunedInput {
+			for i3, val3 := range inputArr {
 
 				// Don't use the same number twice
 				if i2 == i3 || i2 == i {
