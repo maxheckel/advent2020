@@ -17,8 +17,7 @@ func main() {
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 
-
-	seatNumbers := []int{}
+	var seatNumbers []int
 	for scanner.Scan() {
 		seatNumbers = append(seatNumbers, getSeatNumber(scanner.Text()))
 	}
