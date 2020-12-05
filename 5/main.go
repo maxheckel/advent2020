@@ -54,17 +54,19 @@ func getSeatNumber(directions string) int {
 		endCol:   7,
 	}
 	for _, char := range directions{
+		rowsChanged := math.Ceil((seats.endRow - seats.startRow) / 2)
+		colsChanged := math.Ceil((seats.endCol - seats.startCol) / 2)
 		switch string(char) {
 		case "F":
-			seats.endRow -= math.Ceil((seats.endRow-seats.startRow)/2)
+			seats.endRow -= rowsChanged
 		case "B":
-			seats.startRow += math.Ceil((seats.endRow-seats.startRow)/2)
+			seats.startRow += rowsChanged
 		case "L":
-			seats.endCol -= math.Ceil((seats.endCol-seats.startCol)/2)
+			seats.endCol -= colsChanged
 		case "R":
-			seats.startCol += math.Ceil((seats.endCol-seats.startCol)/2)
+			seats.startCol += colsChanged
 		}
 	}
 
-	return int(math.Min(seats.endRow, seats.startRow) * 8 + math.Min(seats.startCol, seats.endCol))
+	return int(seats.endRow * 8 + seats.endCol)
 }
