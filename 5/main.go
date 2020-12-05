@@ -20,23 +20,28 @@ func main() {
 
 	seatNumbers := []int{}
 	for scanner.Scan() {
-		seatNumber := getSeatNumber(scanner.Text())
-		seatNumbers = append(seatNumbers, seatNumber)
+		seatNumbers = append(seatNumbers, getSeatNumber(scanner.Text()))
 	}
 	sort.Ints(seatNumbers)
+	mySeat := getMissingSeat(seatNumbers)
+	fmt.Println(fmt.Sprintf("Part 1: %d", seatNumbers[len(seatNumbers)-1]))
+	fmt.Println(fmt.Sprintf("Part 2: %d", mySeat))
+
+}
+
+func getMissingSeat(seatNumbers []int) int {
+
 	mySeat := 0
-	for i, sn := range seatNumbers{
+	for i, sn := range seatNumbers {
 		if i == len(seatNumbers)-1 {
 			continue
 		}
 		if seatNumbers[i+1] != sn+1 {
-			mySeat = sn+1
+			mySeat = sn + 1
 			break
 		}
 	}
-	fmt.Println(fmt.Sprintf("Part 1: %d", seatNumbers[len(seatNumbers)-1]))
-	fmt.Println(fmt.Sprintf("Part 2: %d", mySeat))
-
+	return mySeat
 }
 
 type AvailableSeats struct {
