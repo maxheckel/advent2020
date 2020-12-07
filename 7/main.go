@@ -78,10 +78,7 @@ func main() {
 	goldSubCount := 0
 	for _, bag := range bags {
 		if bag.color == "shiny gold" {
-			for _, child := range bag.children{
-				count := findCountWithinBag(bag, child)
-				goldSubCount += count + (count * findNumBagsInBag(child))
-			}
+			goldSubCount = findNumBagsInBag(bag)
 		}
 
 		if hasGoldAncestors(bag.children) {
