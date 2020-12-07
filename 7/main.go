@@ -95,13 +95,12 @@ func main() {
 }
 
 func findCountWithinBag(bag *Bag, child *Bag) int {
-	count := 0
 	for _, fchild := range bag.flatChildren {
 		if fchild.color == child.color {
-			count = fchild.count
+			return fchild.count
 		}
 	}
-	return count
+	return 0
 }
 
 func findNumBagsInBag(bag *Bag) int {
