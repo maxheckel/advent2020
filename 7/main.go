@@ -10,13 +10,6 @@ import (
 	"strings"
 )
 
-type Bag struct{
-	color        string
-	count        int
-	children     []*Bag
-	flatChildren []Bag
-}
-
 func lineToBag(line string) *Bag {
 	line = strings.ReplaceAll(line, "bags", "")
 	line = strings.ReplaceAll(line, "bag", "")
@@ -47,6 +40,14 @@ func lineToBag(line string) *Bag {
 		bag.flatChildren = append(bag.flatChildren, *childBag)
 	}
 	return bag
+}
+
+
+type Bag struct{
+	color        string
+	count        int
+	children     []*Bag
+	flatChildren []Bag
 }
 
 func main() {
@@ -82,11 +83,11 @@ func main() {
 				goldSubCount += count + (count * findNumBagsInBag(child))
 			}
 		}
-		if len(bag.children) > 0 {
-			if findGoldAncestors(bag.children) > 0 {
-				goldCount++
-			}
+
+		if hasGoldAncestors(bag.children) {
+			goldCount++
 		}
+
 	}
 
 	fmt.Printf("Part 1: %d\n", goldCount)
@@ -115,16 +116,17 @@ func findNumBagsInBag(bag *Bag) int {
 	return total
 }
 
-func findGoldAncestors(bags []*Bag) int{
-	goldCount := 0
+func hasGoldAncestors(bags []*Bag) bool{
 	for _, bag := range bags {
 		if bag.color == "shiny gold"{
-			return 1
+			return true
 		}
 		if len(bag.children) > 0 {
-			goldCount += findGoldAncestors(bag.children)
+			if hasGoldAncestors(bag.children){
+				return true
+			}
 		}
 	}
-	return goldCount
+	return false
 
 }
