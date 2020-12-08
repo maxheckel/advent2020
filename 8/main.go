@@ -38,10 +38,10 @@ func main(){
 	for scanner.Scan() {
 		ops = append(ops, OperationFromString(scanner.Text()))
 	}
-	terminated := false
-
 	result, _ := runOps(ops)
 	fmt.Printf("Part 1: %d\n", result)
+
+	terminated := false
 	iterator := 0
 	for !terminated {
 		for ops[iterator].opType == "acc" {
