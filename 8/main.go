@@ -26,15 +26,6 @@ func OperationFromString(input string) *Operation {
 	return op
 }
 
-func wasVisited(op *Operation, visited []*Operation) bool{
-	for _, opCheck := range visited {
-		if opCheck == op {
-			return true
-		}
-	}
-	return false
-}
-
 func main(){
 	file, err := os.Open("./8/input.txt")
 	if err != nil {
@@ -48,10 +39,9 @@ func main(){
 		ops = append(ops, OperationFromString(scanner.Text()))
 	}
 	terminated := false
-	var result int
-	result, _ = runOps(ops)
-	fmt.Printf("Part 1: %d\n", result)
 
+	result, _ := runOps(ops)
+	fmt.Printf("Part 1: %d\n", result)
 	iterator := 0
 	for !terminated {
 		for ops[iterator].opType == "acc" {
@@ -80,9 +70,9 @@ func swapOp(copiedOps []*Operation, position int) {
 func runOps(ops []*Operation) (int, bool) {
 	currentVal := 0
 	currentPos := 0
-	var visited []*Operation
-	for !wasVisited(ops[currentPos], visited) {
-		visited = append(visited, ops[currentPos])
+	visited := map[*Operation]bool{}
+	for visited[ops[currentPos]] == false {
+		visited[ops[currentPos]] = true
 		switch ops[currentPos].opType {
 		case "nop":
 			currentPos++
