@@ -5,25 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 )
 
 type Operation struct {
 	opType string
 	opValue int
-}
-
-func OperationFromString(input string) *Operation {
-	op := &Operation{}
-	split := strings.Split(input, " ")
-	op.opType = split[0]
-
-	op.opValue, _ = strconv.Atoi(split[1][1:len(split[1])])
-	if strings.Contains(split[1], "-") {
-		op.opValue *= -1
-	}
-	return op
 }
 
 func main(){
@@ -36,7 +23,9 @@ func main(){
 
 	var ops []*Operation
 	for scanner.Scan() {
-		ops = append(ops, OperationFromString(scanner.Text()))
+		op := &Operation{}
+		fmt.Sscanf(scanner.Text(), "%s %d", &op.opType, &op.opValue)
+		ops = append(ops, op)
 	}
 	result, _ := runOps(ops)
 	fmt.Printf("Part 1: %d\n", result)
@@ -47,24 +36,15 @@ func main(){
 		for ops[iterator].opType == "acc" {
 			iterator++
 		}
-		swapOp(ops, iterator)
+		swapper := strings.NewReplacer("jmp", "nop", "nop", "jmp")
+		ops[iterator].opType = swapper.Replace(ops[iterator].opType)
 		result, terminated = runOps(ops)
 		// Switch it back
-		swapOp(ops, iterator)
+		ops[iterator].opType = swapper.Replace(ops[iterator].opType)
 		iterator++
 	}
 	fmt.Printf("Part 2: %d", result)
 
-}
-
-func swapOp(copiedOps []*Operation, position int) {
-	switch copiedOps[position].opType {
-	case "jmp":
-		copiedOps[position].opType = "nop"
-		break
-	case "nop":
-		copiedOps[position].opType = "jmp"
-	}
 }
 
 func runOps(ops []*Operation) (int, bool) {
