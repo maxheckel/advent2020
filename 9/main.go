@@ -18,9 +18,6 @@ func main() {
 	badNumber := part1(cypher)
 	globalElapsed := time.Since(globalStart)
 	part1Elapsed := time.Since(algoStart)
-	fmt.Printf("Part 1 took overall %s\n", globalElapsed)
-	fmt.Printf("Part1 Algo took %s\n", part1Elapsed)
-	fmt.Printf("Part 1: %d\n", badNumber)
 
 	// Remove the end of the list, once we reach a number that's == to the bad number any subsequent subsets cannot
 	// be summed to create the number
@@ -33,9 +30,13 @@ func main() {
 	result := part2(cypher, badNumber)
 	globalElapsed = time.Since(globalStart)
 	part2Elapsed := time.Since(algoStart)
+	fmt.Printf("Part 1 took overall %s\n", globalElapsed)
+	fmt.Printf("Part1 Algo took %s\n", part1Elapsed)
+	fmt.Printf("Part 1: %d\n", badNumber)
 	fmt.Printf("\n\nPart 2 took overall %s\n", globalElapsed)
 	fmt.Printf("Part 2 Algo took %s\n", part2Elapsed)
 	fmt.Printf("Part 2: %d", result)
+
 }
 
 func getCypher() []int {
@@ -54,32 +55,29 @@ func getCypher() []int {
 
 func part2(cypher []int, badNumber int) int {
 	left, right, eRight, eLeft, eSum, sum := 0, 0, len(cypher)-1, len(cypher)-1, 0, 0
-	for true {
+	for left < eLeft && right < eRight {
 		if sum < badNumber {
 			sum += cypher[right]
 			right++
-			continue
 		} else if sum > badNumber {
 			sum -= cypher[left]
 			left++
-			continue
+		}
+		if sum == badNumber {
+			sort.Ints(cypher[left:right])
+			return cypher[left:right][0] + cypher[left:right][len(cypher[left:right])-1]
 		}
 
 		if eSum < badNumber {
 			eSum += cypher[eLeft]
 			eLeft--
-			continue
 		} else if eSum > badNumber {
 			eSum -= cypher[eRight]
 			eRight--
-			continue
-		}
-
-		if sum == badNumber {
-			sort.Ints(cypher[left:right])
-			return cypher[left:right][0] + cypher[left:right][len(cypher[left:right])-1]
 		}
 		if eSum == badNumber {
+			eLeft++
+			eRight++
 			sort.Ints(cypher[eLeft:eRight])
 			return cypher[eLeft:eRight][0] + cypher[eLeft:eRight][len(cypher[eLeft:eRight])-1]
 		}
