@@ -49,10 +49,15 @@ func main() {
 		if sum < badNumber {
 			sum += cypher[right]
 			right++
-		} else if sum > badNumber {
+			continue
+		}
+		if sum > badNumber {
 			sum -= cypher[left]
 			left++
-		} else {
+			continue
+		}
+
+		if sum == badNumber{
 			sort.Ints(cypher[left:right])
 			globalElapsed := time.Since(globalStart)
 			part2Elapsed := time.Since(algoStart)
