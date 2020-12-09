@@ -43,25 +43,26 @@ func main() {
 			break
 		}
 	}
-	TOP:
-	for i, _ := range cypher{
-		runningSum := 0
-		for j, val := range cypher[i:]{
-			runningSum+=val
-			if runningSum > badNumber {
-				break
-			}
-			if runningSum == badNumber {
-				sort.Ints(cypher[i:i+j+1])
-				globalElapsed := time.Since(globalStart)
-				part1Elapsed := time.Since(algoStart)
-				fmt.Printf("\n\nPart 2 took overall %s\n", globalElapsed)
-				fmt.Printf("Part 2 Algo took %s\n", part1Elapsed)
-				fmt.Printf("Part 2: %d", cypher[i:i+j+1][0] + cypher[i:i+j+1][len(cypher[i:i+j+1])-1])
-				break TOP
-			}
+	left, right := 0, 0
+	sum := 0
+	for right < len(cypher) {
+		if sum < badNumber {
+			sum += cypher[right]
+			right++
+		} else if sum > badNumber {
+			sum -= cypher[left]
+			left++
+		} else {
+			sort.Ints(cypher[left:right])
+			globalElapsed := time.Since(globalStart)
+			part2Elapsed := time.Since(algoStart)
+			fmt.Printf("\n\nPart 2 took overall %s\n", globalElapsed)
+			fmt.Printf("Part 2 Algo took %s\n", part2Elapsed)
+			fmt.Printf("Part 2: %d", cypher[left:right][0] + cypher[left:right][len(cypher[left:right])-1])
+			break
 		}
 	}
+
 
 }
 
