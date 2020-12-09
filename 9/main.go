@@ -22,6 +22,8 @@ func main() {
 	fmt.Printf("Part1 Algo took %s\n", part1Elapsed)
 	fmt.Printf("Part 1: %d\n", badNumber)
 
+	// Remove the end of the list, once we reach a number that's == to the bad number any subsequent subsets cannot
+	// be summed to create the number
 	for i, val := range cypher{
 		if val > badNumber {
 			cypher = cypher[0:i]
