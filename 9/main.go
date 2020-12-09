@@ -16,7 +16,7 @@ func main() {
 
 	algoStart := time.Now()
 	badNumber := part1(cypher)
-	globalElapsed := time.Since(globalStart)
+	global1Elapsed := time.Since(globalStart)
 	part1Elapsed := time.Since(algoStart)
 
 	// Remove the end of the list, once we reach a number that's == to the bad number any subsequent subsets cannot
@@ -28,15 +28,14 @@ func main() {
 		}
 	}
 	result := part2(cypher, badNumber)
-	globalElapsed = time.Since(globalStart)
+	global2Elapsed := time.Since(globalStart)
 	part2Elapsed := time.Since(algoStart)
-	fmt.Printf("Part 1 took overall %s\n", globalElapsed)
+	fmt.Printf("Part 1 took overall %s\n", global1Elapsed)
 	fmt.Printf("Part1 Algo took %s\n", part1Elapsed)
 	fmt.Printf("Part 1: %d\n", badNumber)
-	fmt.Printf("\n\nPart 2 took overall %s\n", globalElapsed)
+	fmt.Printf("\n\nPart 2 took overall %s\n", global2Elapsed)
 	fmt.Printf("Part 2 Algo took %s\n", part2Elapsed)
 	fmt.Printf("Part 2: %d", result)
-
 }
 
 func getCypher() []int {
