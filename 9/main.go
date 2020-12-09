@@ -51,31 +51,31 @@ func getCypher() []int {
 }
 
 func part2(cypher []int, badNumber int) int {
-	oleft, oright, left, right, sum, osum := 0, 0, len(cypher)-1, len(cypher)-1, 0, 0
+	left, right, eRight, eLeft, eSum, sum := 0, 0, len(cypher)-1, len(cypher)-1, 0, 0
 	for true {
-		if osum < badNumber {
-			osum += cypher[oright]
-			oright++
-		} else if osum > badNumber {
-			osum -= cypher[oleft]
-			oleft++
-		}
-
 		if sum < badNumber {
 			sum += cypher[right]
-			right--
+			right++
 		} else if sum > badNumber {
 			sum -= cypher[left]
-			left--
+			left++
 		}
 
-		if osum == badNumber {
-			sort.Ints(cypher[oleft:oright])
-			return cypher[oleft:oright][0] + cypher[oleft:oright][len(cypher[oleft:oright])-1]
+		if eSum < badNumber {
+			eSum += cypher[eLeft]
+			eLeft--
+		} else if eSum > badNumber {
+			eSum -= cypher[eRight]
+			eRight--
 		}
+
 		if sum == badNumber {
-			sort.Ints(cypher[right:left])
-			return cypher[right:left][0] + cypher[right:left][len(cypher[right:left])-1]
+			sort.Ints(cypher[left:right])
+			return cypher[left:right][0] + cypher[left:right][len(cypher[left:right])-1]
+		}
+		if eSum == badNumber {
+			sort.Ints(cypher[eLeft:eRight])
+			return cypher[eLeft:eRight][0] + cypher[eLeft:eRight][len(cypher[eLeft:eRight])-1]
 		}
 	}
 	return 0
