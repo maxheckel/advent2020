@@ -56,17 +56,21 @@ func part2(cypher []int, badNumber int) int {
 		if sum < badNumber {
 			sum += cypher[right]
 			right++
+			continue
 		} else if sum > badNumber {
 			sum -= cypher[left]
 			left++
+			continue
 		}
 
 		if eSum < badNumber {
 			eSum += cypher[eLeft]
 			eLeft--
+			continue
 		} else if eSum > badNumber {
 			eSum -= cypher[eRight]
 			eRight--
+			continue
 		}
 
 		if sum == badNumber {
@@ -74,8 +78,6 @@ func part2(cypher []int, badNumber int) int {
 			return cypher[left:right][0] + cypher[left:right][len(cypher[left:right])-1]
 		}
 		if eSum == badNumber {
-			eLeft++
-			eRight++
 			sort.Ints(cypher[eLeft:eRight])
 			return cypher[eLeft:eRight][0] + cypher[eLeft:eRight][len(cypher[eLeft:eRight])-1]
 		}
