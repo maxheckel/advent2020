@@ -21,9 +21,7 @@ func part2(input []int) int {
 	memo := map[int]int{0: 1}
 	for _, v := range input[1:] {
 		memo[v] = memo[v-1] + memo[v-2] + memo[v-3]
-
 	}
-	fmt.Println(memo)
 	return memo[input[len(input)-1]]
 }
 
