@@ -48,11 +48,11 @@ func part1(rows []string) []string {
 				newRow += string(floor)
 				continue
 			}
-			if seat == empty && part1NumAdjacentSeatsOccupied(x, y, rows) == 0 {
+			if seat == empty && adjacentSeatsOccupied(x, y, rows) == 0 {
 				newRow += string(occupied)
 				continue
 			}
-			if seat == occupied && part1NumAdjacentSeatsOccupied(x, y, rows) >= 4 {
+			if seat == occupied && adjacentSeatsOccupied(x, y, rows) >= 4 {
 				newRow += string(empty)
 				continue
 			}
@@ -77,11 +77,11 @@ func part2(rows []string) []string {
 				newRow += string(floor)
 				continue
 			}
-			if seat == empty && part2NumAdjacentSeatsOccupied(x, y, rows) == 0 {
+			if seat == empty && visibleSeatsOccupied(x, y, rows) == 0 {
 				newRow += string(occupied)
 				continue
 			}
-			if seat == occupied && part2NumAdjacentSeatsOccupied(x, y, rows) >= 5 {
+			if seat == occupied && visibleSeatsOccupied(x, y, rows) >= 5 {
 				newRow += string(empty)
 				continue
 			}
@@ -97,7 +97,7 @@ func part2(rows []string) []string {
 	return postRun
 }
 
-func part1NumAdjacentSeatsOccupied(x, y int, input []string) int {
+func adjacentSeatsOccupied(x, y int, input []string) int {
 	count := 0
 	adjacentSpots := getAdjacentSeats(x, input, y)
 	for _, spot := range adjacentSpots {
@@ -109,7 +109,7 @@ func part1NumAdjacentSeatsOccupied(x, y int, input []string) int {
 }
 
 
-func part2NumAdjacentSeatsOccupied(x, y int, input []string) int {
+func visibleSeatsOccupied(x, y int, input []string) int {
 	count := 0
 	adjacentSpots := getVisibleSeats(x,  y, input)
 	for _, spot := range adjacentSpots {
@@ -123,41 +123,11 @@ func part2NumAdjacentSeatsOccupied(x, y int, input []string) int {
 
 func getVisibleSeats(x, y int, input []string) []uint8 {
 	var visibleSeats []uint8
-	appendLeft := uint8(0)
-	for index, char := range input[y]{
-		if char == floor {
-			continue
-		}
-		if index < x {
-			appendLeft = input[y][index]
-		}
-		if index == x && appendLeft != 0 {
-			visibleSeats = append(visibleSeats, appendLeft)
-		}
-		if index > x {
-			visibleSeats = append(visibleSeats, input[y][index])
-			break
-		}
-	}
+	left := uint8(0)
+	right := uint8(0)
 
-	appendTop := uint8(0)
-	for j, row := range input{
-		if row[x] == floor {
-			continue
-		}
-		if j < y {
-			appendTop = row[x]
-		}
-		if j == y && appendTop != 0 {
-			visibleSeats = append(visibleSeats, appendTop)
-		}
-		if j > y {
-			visibleSeats = append(visibleSeats, row[x])
-			break
-		}
-	}
-
-	//
+	top := uint8(0)
+	bottom := uint8(0)
 	bottomLeft := uint8(0)
 	topLeft := uint8(0)
 	bottomRight := uint8(0)
@@ -165,6 +135,29 @@ func getVisibleSeats(x, y int, input []string) []uint8 {
 	inputLength := len(input)
 	// left
 	for i := 0; i < len(input[0]); i++ {
+		xChar := input[y][i]
+		if i < x && xChar != floor{
+			left = xChar
+		}
+		if i == x && left != 0 {
+			visibleSeats = append(visibleSeats, left)
+		}
+		if i > x && xChar != floor && right == 0 {
+			right = xChar
+			visibleSeats = append(visibleSeats, right)
+		}
+
+		yChar := input[i][x]
+		if i < y && yChar != floor {
+			top = yChar
+		}
+		if i == y && top != 0 {
+			visibleSeats = append(visibleSeats, top)
+		}
+		if i > y && yChar != floor && bottom == 0 {
+			bottom = yChar
+			visibleSeats = append(visibleSeats, bottom)
+		}
 		if i < x {
 			// Bottom left
 			bottomLeftIndex := y - i + x
@@ -192,9 +185,6 @@ func getVisibleSeats(x, y int, input []string) []uint8 {
 			if bottomRightIndex >= 0 && bottomRightIndex < inputLength && input[bottomRightIndex][i] != floor && bottomRight == 0 {
 				bottomRight = input[bottomRightIndex][i]
 			}
-		}
-		if bottomRight != 0 && topRight != 0 {
-			break
 		}
 	}
 	visibleSeats = append(visibleSeats, topRight)
