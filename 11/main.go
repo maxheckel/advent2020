@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/maxheckel/advent2020/common"
+	"time"
 )
 
 const (
@@ -16,6 +17,7 @@ const (
 
 func main() {
 	rows := common.StringListFromFile("./11/input.txt")
+	algoStart := time.Now()
 	part1EndState := part1(rows)
 	part2EndState := part2(rows)
 	part1Occupied := 0
@@ -34,7 +36,8 @@ func main() {
 			}
 		}
 	}
-
+	part2Elapsed := time.Since(algoStart)
+	fmt.Println(part2Elapsed)
 	fmt.Printf("Part 1: %d\n", part1Occupied)
 	fmt.Printf("Part 2: %d\n", part2Occupied)
 }
@@ -122,10 +125,8 @@ func visibleSeatsOccupied(x, y int, input []string) int {
 
 
 func getVisibleSeats(x, y int, input []string) []uint8 {
-	var visibleSeats []uint8
 	left := uint8(0)
 	right := uint8(0)
-
 	top := uint8(0)
 	bottom := uint8(0)
 	bottomLeft := uint8(0)
@@ -139,24 +140,16 @@ func getVisibleSeats(x, y int, input []string) []uint8 {
 		if i < x && xChar != floor{
 			left = xChar
 		}
-		if i == x && left != 0 {
-			visibleSeats = append(visibleSeats, left)
-		}
 		if i > x && xChar != floor && right == 0 {
 			right = xChar
-			visibleSeats = append(visibleSeats, right)
 		}
 
 		yChar := input[i][x]
 		if i < y && yChar != floor {
 			top = yChar
 		}
-		if i == y && top != 0 {
-			visibleSeats = append(visibleSeats, top)
-		}
 		if i > y && yChar != floor && bottom == 0 {
 			bottom = yChar
-			visibleSeats = append(visibleSeats, bottom)
 		}
 		if i < x {
 			// Bottom left
@@ -170,10 +163,7 @@ func getVisibleSeats(x, y int, input []string) []uint8 {
 				topLeft = input[topLeftIndex][i]
 			}
 		}
-		if i == x {
-			visibleSeats = append(visibleSeats, bottomLeft)
-			visibleSeats = append(visibleSeats, topLeft)
-		}
+
 
 		if i > x {
 			topRightIndex := y - (i - x)
@@ -186,12 +176,21 @@ func getVisibleSeats(x, y int, input []string) []uint8 {
 				bottomRight = input[bottomRightIndex][i]
 			}
 		}
+		if left != 0 && right != 0 && top != 0 && bottom != 0 && bottomLeft != 0 && topLeft != 0 && bottomRight != 0 && topRight != 0 {
+			break
+		}
 	}
-	visibleSeats = append(visibleSeats, topRight)
-	visibleSeats = append(visibleSeats, bottomRight)
 
-
-	return visibleSeats
+	return []uint8{
+		left,
+		right,
+		top,
+		bottom,
+		bottomLeft,
+		topLeft,
+		bottomRight,
+		topRight,
+	}
 }
 
 func getAdjacentSeats(x int, input []string, y int) []uint8 {
