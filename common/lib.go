@@ -20,3 +20,16 @@ func IntListFromFile(filepath string) []int{
 	}
 	return intlist
 }
+
+func StringListFromFile(filepath string) []string{
+	file, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var stringList []string
+	split := strings.Split(string(file), "\n")
+	for _, row := range split {
+		stringList = append(stringList, row)
+	}
+	return stringList
+}
