@@ -11,9 +11,9 @@ import (
 )
 type Assignment struct {
 	location uint64
-	runes    []rune
-	value string
-	intVal uint64
+	runeVal  []rune
+	value    string
+	intVal   uint64
 }
 func main() {
 	file, err := os.Open("./14/input.txt")
@@ -26,7 +26,6 @@ func main() {
 	mem := map[uint64]uint64{}
 	mem2 := map[string]uint64{}
 	for scanner.Scan() {
-
 		line := scanner.Text()
 		if strings.Contains(line, "mask") {
 			fmt.Sscanf(line, "mask = %s", &currentMask)
@@ -75,14 +74,14 @@ func part1(line string, currentMask string, mem map[uint64]uint64) Assignment {
 	assn := Assignment{}
 	var val uint64
 	fmt.Sscanf(line, "mem[%d] = %d", &assn.location, &val)
-	assn.runes = []rune(fmt.Sprintf("%0"+strconv.Itoa(36)+"s", strconv.FormatUint(val, 2)))
+	assn.runeVal = []rune(fmt.Sprintf("%0"+strconv.Itoa(36)+"s", strconv.FormatUint(val, 2)))
 	for i, r := range currentMask {
 		if string(r) == "X" {
 			continue
 		}
-		assn.runes[i] = r
+		assn.runeVal[i] = r
 	}
-	assn.value = string(assn.runes)
+	assn.value = string(assn.runeVal)
 	mem[assn.location], _ = strconv.ParseUint(assn.value, 2, 64)
 	return assn
 }
