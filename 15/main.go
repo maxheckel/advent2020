@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 	//seen := map[int]int{
@@ -21,11 +24,14 @@ func main() {
 	for k, v := range seen{
 		seen2[k]=v
 	}
-
+	start := time.Now()
 	part1 := playGame(seen, 2020)
+	part1Time := time.Since(start)
 	part2 := playGame(seen2, 30000000)
+	part2Time := time.Since(start)
 	fmt.Printf("Part 1: %d\n", part1)
 	fmt.Printf("Part 2: %d\n", part2)
+	fmt.Printf("Part 1 Time: %s\nPart 2 Time: %s", part1Time, part2Time)
 }
 
 func playGame(seen map[int]int, iterations int) int {
