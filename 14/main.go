@@ -6,8 +6,10 @@ import (
 	"log"
 	"math"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 type Assignment struct {
 	location uint64
@@ -16,6 +18,7 @@ type Assignment struct {
 	intVal   uint64
 }
 func main() {
+
 	file, err := os.Open("./14/input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -25,6 +28,7 @@ func main() {
 	var currentMask string
 	mem := map[uint64]uint64{}
 	mem2 := map[string]uint64{}
+	algoStart := time.Now()
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.Contains(line, "mask") {
@@ -35,6 +39,7 @@ func main() {
 			part2(line, assn, currentMask, mem2)
 		}
 	}
+
 	total := uint64(0)
 	for _, val := range mem {
 		total += val
@@ -43,8 +48,27 @@ func main() {
 	for _, val := range mem2 {
 		total2 += val
 	}
+
+	elapsed := time.Since(algoStart)
 	fmt.Printf("Part 1: %d\n", total)
 	fmt.Printf("Part 2: %d\n", total2)
+
+	fmt.Printf("Time taken %s\n", elapsed)
+	PrintMemUsage()
+}
+
+func PrintMemUsage() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	// For info on each, see: https://golang.org/pkg/runtime/#MemStats
+	fmt.Printf("Alloc = %v MiB", bToMb(m.Alloc))
+	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
+	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
+	fmt.Printf("\tNumGC = %v\n", m.NumGC)
+}
+
+func bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
 }
 
 func part2(line string, assn Assignment, currentMask string, mem2 map[string]uint64) {
