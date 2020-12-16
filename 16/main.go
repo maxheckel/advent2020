@@ -20,20 +20,59 @@ func main() {
 	myTicketRaw := parts[1]
 	myTicket := strings.Split(strings.Split(myTicketRaw, "\n")[1], ",")
 	total, validTickets := part1(rules, parts)
-	validTicketInts := [][]int{}
-	for _, ticket := range validTickets{
-		ticketStrings := strings.Split(ticket, ",")
-		newTicketInts := []int{}
-		for _, i := range ticketStrings{
-			newTicketInts = append(newTicketInts, common.IntVal(i))
-		}
-		validTicketInts = append(validTicketInts, newTicketInts)
-	}
+	part2Total := part2(validTickets, rules, myTicket)
+	fmt.Printf("Part 1: %d\n", total)
+	fmt.Printf("Part 2: %d\n", part2Total)
+}
 
-	for x := 0; x < len(validTicketInts[0]); x++{
-		for i, rule := range rules{
+func part2(validTickets []string, rules []Rule, myTicket []string) int {
+	validTicketInts := gitIntArrayOfTickets(validTickets)
+	AddPossiblePositionsToRules(validTicketInts, rules)
+	FindRulePositions(rules)
+	runningVal := CalcTotalForMyTicket(rules, myTicket)
+	return runningVal
+}
+
+func CalcTotalForMyTicket(rules []Rule, myTicket []string) int {
+	runningVal := 1
+	for _, rule := range rules {
+		if strings.Contains(rule.name, "departure") {
+			locVal := -1
+			for v := range rule.validPositions {
+				locVal = v
+			}
+			runningVal *= common.IntVal(myTicket[locVal])
+		}
+	}
+	return runningVal
+}
+
+func FindRulePositions(rules []Rule) {
+	numRuns := len(rules[0].validPositions)
+	for i := 0; i < numRuns; i++ {
+		for i, rule := range rules {
+			if len(rule.validPositions) > 1 {
+				continue
+			}
+			removePosition := -1
+			for r := range rule.validPositions {
+				removePosition = r
+			}
+			for j := range rules {
+				if i == j {
+					continue
+				}
+				delete(rules[j].validPositions, removePosition)
+			}
+		}
+	}
+}
+
+func AddPossiblePositionsToRules(validTicketInts [][]int, rules []Rule) {
+	for x := 0; x < len(validTicketInts[0]); x++ {
+		for i, rule := range rules {
 			validRule := true
-			for _, ticket := range validTicketInts{
+			for _, ticket := range validTicketInts {
 				if !rule.validNums[ticket[x]] {
 					validRule = false
 					break
@@ -45,38 +84,19 @@ func main() {
 
 		}
 	}
+}
 
-	numRuns := len(rules[0].validPositions)
-	for i := 0; i < numRuns; i++{
-		for i, rule := range rules{
-			if len(rule.validPositions) > 1{
-				continue
-			}
-			removePosition := -1
-			for r := range rule.validPositions{
-				removePosition = r
-			}
-			for j := range rules{
-				if i == j {
-					continue
-				}
-				delete(rules[j].validPositions, removePosition)
-			}
+func gitIntArrayOfTickets(validTickets []string) [][]int {
+	validTicketInts := [][]int{}
+	for _, ticket := range validTickets {
+		ticketStrings := strings.Split(ticket, ",")
+		newTicketInts := []int{}
+		for _, i := range ticketStrings {
+			newTicketInts = append(newTicketInts, common.IntVal(i))
 		}
+		validTicketInts = append(validTicketInts, newTicketInts)
 	}
-
-	runningVal := 1
-	for _, rule := range rules{
-		if strings.Contains(rule.name, "departure") {
-			locVal := -1
-			for v := range rule.validPositions{
-				locVal = v
-			}
-			runningVal*=common.IntVal(myTicket[locVal])
-		}
-	}
-	fmt.Printf("Part 1: %d\n", total)
-	fmt.Printf("Part 2: %d\n", runningVal)
+	return validTicketInts
 }
 
 
