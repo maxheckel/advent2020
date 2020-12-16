@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/maxheckel/advent2020/common"
 	"io/ioutil"
-	"sort"
 	"strings"
 )
 
@@ -18,6 +17,8 @@ func main() {
 	parts := strings.Split(string(file), "\n\n")
 	rawRules := strings.Split(parts[0], "\n")
 	rules := getRules(rawRules)
+	myTicketRaw := parts[1]
+	myTicket := strings.Split(strings.Split(myTicketRaw, "\n")[1], ",")
 	total, validTickets := part1(rules, parts)
 	validTicketInts := [][]int{}
 	for _, ticket := range validTickets{
@@ -30,13 +31,9 @@ func main() {
 	}
 
 	for x := 0; x < len(validTicketInts[0]); x++{
-
 		for i, rule := range rules{
 			validRule := true
-			for i, ticket := range validTicketInts{
-				if rule.name == "type" && i == 93 && x == 4{
-					fmt.Println(ticket[x])
-				}
+			for _, ticket := range validTicketInts{
 				if !rule.validNums[ticket[x]] {
 					validRule = false
 					break
@@ -49,8 +46,8 @@ func main() {
 		}
 	}
 
-
-	for i := 0; i < 100; i++{
+	numRuns := len(rules[0].validPositions)
+	for i := 0; i < numRuns; i++{
 		for i, rule := range rules{
 			if len(rule.validPositions) > 1{
 				continue
@@ -67,25 +64,21 @@ func main() {
 			}
 		}
 	}
-	sort.SliceStable(rules, func(i, j int) bool {
-		return len(rules[i].validPositions) < len(rules[j].validPositions)
-	})
-	//for _, rule := range rules{
-	//	fmt.Println(rule.name, rule.validPositions)
-	//}
 
-	fmt.Printf("Part 1: %d", total)
-}
-
-func difference(r1, r2 Rule) []int {
-	foundDifs := []int{}
-	for k := range r1.validPositions{
-		if !r2.validPositions[k] {
-			foundDifs = append(foundDifs, k)
+	runningVal := 1
+	for _, rule := range rules{
+		if strings.Contains(rule.name, "departure") {
+			locVal := -1
+			for v := range rule.validPositions{
+				locVal = v
+			}
+			runningVal*=common.IntVal(myTicket[locVal])
 		}
 	}
-	return foundDifs
+	fmt.Printf("Part 1: %d\n", total)
+	fmt.Printf("Part 2: %d\n", runningVal)
 }
+
 
 func part1(rules []Rule, parts []string) (int, []string) {
 	total := 0
