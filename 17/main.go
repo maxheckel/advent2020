@@ -55,6 +55,7 @@ func main() {
 
 func newState(w, x, y, z int, currentState map[string]bool) int {
 	activeNumbers := 0
+	TOP:
 	for dx := x-1; dx <= x+1; dx++{
 		for dy := y-1; dy <= y+1; dy++{
 			for dz := z-1; dz <= z+1; dz++{
@@ -64,6 +65,9 @@ func newState(w, x, y, z int, currentState map[string]bool) int {
 					}
 					if activeAtPosition(dw, dx, dy, dz, currentState) {
 						activeNumbers++
+						if activeNumbers > 3 {
+							break TOP
+						}
 					}
 				}
 			}
