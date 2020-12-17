@@ -23,6 +23,7 @@ func main() {
 	for i := 1; i <= 6; i++ {
 		nextStateWithW := map[string]bool{}
 		nextStateNoW := map[string]bool{}
+		// Part 2
 		for w := 0 -i; w <= 0+i; w++{
 			for z := 0 - i; z <= 0+i; z++ {
 				for x := 0 - i; x <= initialLength+i; x++ {
@@ -33,6 +34,8 @@ func main() {
 				}
 			}
 		}
+
+		// Part 1
 		for z := 0 - i; z <= 0+i; z++ {
 			for x := 0 - i; x <= initialLength+i; x++ {
 				for y := 0 - i; y <= initialHeight+i; y++ {
