@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	input := common.IntListFromFile("./10/example1.txt")
+	input := common.IntListFromFile("./10/example2.txt")
 	sort.Ints(input)
 	input = append(input, input[len(input)-1]+3)
 	part1Res := part1(input)
